@@ -7,4 +7,5 @@ router.register('reservations', ReservationViewSet, basename='reservations')
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('upload/', upload_image, name='upload_image')
 ]
