@@ -4,6 +4,7 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register('reservations', ReservationViewSet, basename='reservations')
+router.register('dummyModel', DummyModelViewSet, basename='dummyModel')
 
 urlpatterns = [
     path('', include(router.urls)),

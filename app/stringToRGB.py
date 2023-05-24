@@ -8,4 +8,4 @@ def stringToRGB(base64_string):
     imgdata = base64.b64decode(base64_string)
     dataBytesIO = io.BytesIO(imgdata)
     image = Image.open(dataBytesIO)
-    return cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
+    return image
