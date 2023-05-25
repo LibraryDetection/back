@@ -1,18 +1,61 @@
 from django.shortcuts import render
-from .models import Reservation
-from .serializers import ReservationSerializer
+from .models import Reservation, DummyModel
+from .serializers import ReservationSerializer, DummyModelSerializer
 from rest_framework import viewsets
-# from rest_framework.response import Response
+from rest_framework.response import Response
 # from rest_framework import status
 # from rest_framework.decorators import APIView
 # from rest_framework import generics
 # from rest_framework import mixins
 # from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt  # CSRF 보안 임시 해제
+from django.utils.decorators import method_decorator
+from .stringToRGB import stringToRGB
+from django.http import JsonResponse
+import os
+from django.conf import settings
+import yolov5
+
+yolo_weightsdir = settings.YOLOV5_WEIGTHS_DIR
+
+# models 폴더 안의 custom best.pt 넣기(용량 커서 Git에 못 올림ㅠㅠ)
+model = yolov5.load(os.path.join(yolo_weightsdir, 'best.pt'))
 
 #CRUD 한 번에 처리
 class ReservationViewSet(viewsets.ModelViewSet):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
+
+class DummyModelViewSet(viewsets.ModelViewSet):
+    queryset = DummyModel.objects.all()
+    serializer_class = DummyModelSerializer
+
+    def get(self, request):
+        dummy = DummyModel.objects.all()
+        serializer = DummyModelSerializer(dummy, many=True)
+        return Response(serializer.data)
+
+@method_decorator(csrf_exempt, name='dispatch')
+def upload_image(request):
+    if request.method == 'POST':
+        image_url = request.POST.get('data')
+        rgb = stringToRGB(image_url.split(',')[1])
+        results = model(rgb)
+        df = results.pandas().xyxy[0]
+        # print(df) # 탐지 결과 출력
+        # results.show() # 탐지 결과 이미지 띄우기
+        # todo 모델 가져오기 및 감지해야 함
+        name_dict = {}
+        for i in df['name'].unique():
+            name_dict[i] = len(df.loc[df['name'] == i])
+        # DummyModel DB update
+        for i in df['name'].unique():
+            update_dummy = DummyModel.objects.get(className=i)
+            update_dummy.classCount = name_dict[i]
+            update_dummy.save()
+        return JsonResponse({'message': '데이터가 성공적으로 전송되었습니다.'})
+    else:
+        return JsonResponse({'message': 'POST 요청이 아닙니다.'}, status=400)
 
 '''
 class StuNumViewSet(viewsets.ViewSet):
