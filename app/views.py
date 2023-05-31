@@ -3,11 +3,6 @@ from .models import Reservation, DummyModel
 from .serializers import ReservationSerializer, DummyModelSerializer
 from rest_framework import viewsets
 from rest_framework.response import Response
-# from rest_framework import status
-# from rest_framework.decorators import APIView
-# from rest_framework import generics
-# from rest_framework import mixins
-# from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt  # CSRF 보안 임시 해제
 from django.utils.decorators import method_decorator
 from .stringToRGB import stringToRGB
@@ -18,13 +13,13 @@ import yolov5
 
 yolo_weightsdir = settings.YOLOV5_WEIGTHS_DIR
 
-# models 폴더 안의 custom best.pt 넣기(용량 커서 Git에 못 올림ㅠㅠ)
 model = yolov5.load(os.path.join(yolo_weightsdir, 'best.pt'))
 
 #CRUD 한 번에 처리
 class ReservationViewSet(viewsets.ModelViewSet):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
+
 
 class DummyModelViewSet(viewsets.ModelViewSet):
     queryset = DummyModel.objects.all()
@@ -56,6 +51,7 @@ def upload_image(request):
         return JsonResponse({'message': '데이터가 성공적으로 전송되었습니다.'})
     else:
         return JsonResponse({'message': 'POST 요청이 아닙니다.'}, status=400)
+
 
 '''
 class StuNumViewSet(viewsets.ViewSet):
@@ -97,30 +93,3 @@ class StuNumViewSet(viewsets.ViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 '''
-
-'''
-class StuNum(generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin):
-    queryset = React.objects.all()
-    serializer_class = ReactSerializer
-
-    def get(self, request):
-        return self.list(request)
-    
-    def post(self, request):
-        return self.create(request)
-'''
-
-'''
-class StuNum(APIView):
-    def get(self, request):
-        reacts = React.objects.all()
-        serializer = ReactSerializer(reacts, many=True)
-        return Response(serializer.data)
-    
-    def post(self, request):
-        serializer = ReactSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-'''    

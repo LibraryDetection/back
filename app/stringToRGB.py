@@ -1,7 +1,6 @@
 import base64
 import io
 from PIL import Image
-import cv2
 import numpy as np
 
 def stringToRGB(base64_string):
