@@ -6,6 +6,7 @@ class ReservationSerializer(serializers.ModelSerializer):
         model = Reservation
         fields = ['id', 'seatNum', 'stuNum']
 
+
 class DummyModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = DummyModel
