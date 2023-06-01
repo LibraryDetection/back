@@ -4,10 +4,10 @@ from .models import *
 class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reservation
-        fields = ['id', 'seatNum', 'stuNum']
+        fields = ['id', 'seatNum', 'stuNum', 'seatStatus', 'count']
 
 
-class DummyModelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DummyModel
-        fields = ['className', 'classCount']
+# class DummyModelSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = DummyModel
+#         fields = ['className', 'classCount']

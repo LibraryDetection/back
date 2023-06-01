@@ -7,4 +7,5 @@ def stringToRGB(base64_string):
     imgdata = base64.b64decode(base64_string)
     dataBytesIO = io.BytesIO(imgdata)
     image = Image.open(dataBytesIO)
-    return image
+    resized_image = image.resize((1104, 1080))
+    return resized_image
