@@ -30,9 +30,11 @@ class ReservationViewSet(viewsets.ModelViewSet):
 def upload_image(request):
     if request.method == 'POST':
         image_url = request.POST.get('data')
+        direction = request.POST.get('direction')
+        # print(direction)
         rgb = stringToRGB(image_url.split(',')[1])
-        results = seat_detection(rgb)
-        print(results)
+        results = seat_detection(rgb, direction)
+        print(direction, results)
         # results = model(rgb)
         # df = results.pandas().xyxy[0]
         # print(df) # 탐지 결과 출력
