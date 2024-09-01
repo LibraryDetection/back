@@ -2,6 +2,8 @@
 
 **빈번히 일어나는 열람실 사석화와 미반납 문제를 해결하고자 시작하게 된 연구입니다.**
 
+https://github.com/user-attachments/assets/cfb2e5e5-910f-43f9-8625-2170290d006a
+
 YOLOv5 모델을 이용해 짐과 사람, 의자를 감지하고, django와 react를 기반으로 구현한 예약시스템에서 사석화와 미반납 행위가 실시간 카메라로 감지될 시 자동으로 퇴실처리되는 시스템입니다.
 
 ## Contributed Members
